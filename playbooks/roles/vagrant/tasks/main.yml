@@ -1,0 +1,11 @@
+---
+# Look into creating a Vagrant package list in the VARS directory
+- name: Update APT repo cache
+  apt: update_cache=yes
+
+- name: Install Packages
+  apt: pkg={{ item }} state=latest
+  with_items: required_packages 
+  tags: vagrant
+
+
