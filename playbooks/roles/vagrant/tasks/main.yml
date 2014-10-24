@@ -8,4 +8,34 @@
   with_items: required_packages 
   tags: vagrant
 
+# Install PIP for other installations 
+- name: Install pip
+  apt: pkg=python-pip state=latest
+  tags: 
+    - vagrant
 
+# Install virutalenv
+- name: Install  VirtualEnv
+  pip: name=virtualenv
+  tags: 
+    - vagrant
+
+# Install virutalenv
+- name: Install  VirtualEnvWrapper 
+  pip: name=virtualenvwrapper
+  tags:
+    - vagrant
+
+# concat the .profile  ( TODO: Figure out if there is a cleaner way of doing this
+- name: Append .profile for vagrant user
+  shell: cat   /vagrant/playbooks/roles/vagrant/files/virtualenv.sh  >> .profile
+
+# Create the VirualEnv for
+- name: Create AWS VENV ( vaws )
+  remote_user: vagrant 
+  script: install_env.sh  creates=/home/vagrant/.virtualenv/vaws
+
+# Install PIP for for VENV 
+- name: Adds packages to vaws env
+  remote_user: vagrant
+  script: install_env_packages.sh
